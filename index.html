@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clever | Portal</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <style>
+    /* 1. RESET & TOPBAR STYLES */
+    body { margin: 0; background: black; overflow: hidden; font-family: Arial, sans-serif; }
+    
+    #topbar {
+      position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+      background-color: #FFFFFF; color: black; display: flex;
+      align-items: center; padding: 0 15px; z-index: 10000;
+    }
+    #topbar img { height: 40px; margin-right: 12px; }
+    #topbar a { color: black; text-decoration: none; font-size: 20px; font-weight: 500; }
+
+    /* 2. GAME CONTAINER ADJUSTMENT */
+    .webgl-content {
+      position: absolute;
+      top: 60px; /* Pushes game below your 60px bar */
+      width: 100%;
+      height: calc(100% - 60px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Force the Unity containers to fill the available space */
+    #unityContainer, #gameContainer {
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0 !important;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/TemplateData/style.css" />
+  <script src="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/TemplateData/UnityProgress.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/baldi.js"></script>
+  
+  <script>
+    var gameInstance = UnityLoader.instantiate(
+      "gameContainer", 
+      "https://rawcdn.githack.com/Nailington/3kh0-assets/aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/baldi.json", 
+      {
+        onProgress: UnityProgress,
+        Module: {
+          onRuntimeInitialized: function () {
+            UnityProgress(gameInstance, "complete");
+          },
+        },
+      }
+    );
+
+    // 3. THE 360-SPIN FIX (Pointer Lock)
+    // Listens for a click on the game to lock the mouse cursor
+    document.addEventListener('mousedown', function (e) {
+      var canvas = document.querySelector('canvas');
+      if (canvas && e.target === canvas) {
+        canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+        canvas.requestPointerLock();
+      }
+    });
+  </script>
+</head>
+
+<body>
+
+  <div id="topbar">
+    <img src="https://lh3.googleusercontent.com/a-/ALV-UjWQneu0wwz9oqOIrJuC-rEk16wbmHPB_n6DEY2AUPRoiQYTQZs=s240-p-k-rw-no" alt="Logo">
+    <a href="https://sites.google.com/view/bobsgwebsite/home">Clever | Portal</a>
+  </div>
+
+  <div class="webgl-content">
+    <div id="unityContainer">
+      <div id="gameContainer"></div>
+    </div>
+  </div>
+
+</body>
+</html>
