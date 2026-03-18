@@ -1,109 +1,31 @@
-<!DOCTYPE html>
-<html lang="en-us">
-<head>
-  <meta charset="utf-8">
-  <title>Clever | Portal</title>
-  
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/TemplateData/style.css" />
-  <script src="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/TemplateData/UnityProgress.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/baldi.js"></script>
+#topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  /* Use !important to override the external style.css */
+  background-color: #FFFFFF !important; 
+  color: black !important;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 10001; /* Higher than the game */
+  font-family: Arial, sans-serif;
+  box-shadow: none !important; /* Removes any shadow that looks blue/gray */
+  border: none !important;
+}
 
-  <style>
-    /* 1. THE TOP BAR - FORCED WHITE */
-    #topbar {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100% !important;
-      height: 60px !important;
-      background-color: #ffffff !important; /* PURE WHITE */
-      background: #ffffff !important;
-      display: flex !important;
-      align-items: center !important;
-      padding: 0 15px !important;
-      z-index: 1000000 !important; /* Above everything */
-      border: none !important;
-      box-shadow: none !important;
-    }
+#topbar a {
+  color: black !important;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 500;
+  background: transparent !important;
+}
 
-    #topbar img {
-      height: 40px !important;
-      margin-right: 12px !important;
-    }
-
-    #topbar a {
-      color: #000000 !important;
-      text-decoration: none !important;
-      font-family: Arial, sans-serif !important;
-      font-size: 20px !important;
-      font-weight: bold !important;
-    }
-
-    /* 2. THE GAME AREA - FORCED BLACK */
-    body, html {
-      margin: 0 !important;
-      padding: 0 !important;
-      background-color: #000000 !important;
-      overflow: hidden !important;
-      width: 100%;
-      height: 100%;
-    }
-
-    .webgl-content {
-      position: absolute !important;
-      top: 60px !important; /* Starts below the white bar */
-      width: 100% !important;
-      height: calc(100% - 60px) !important;
-      background-color: #000000 !important;
-    }
-
-    #unityContainer, #gameContainer, canvas {
-      width: 100% !important;
-      height: 100% !important;
-      display: block !important;
-      background: #000000 !important;
-      border: none !important;
-    }
-
-    /* Kill any default blue loading bars */
-    .progress, .logo, #unity-loading-bar {
-      display: none !important;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div id="topbar">
-    <img src="https://lh3.googleusercontent.com/a-/ALV-UjWQneu0wwz9oqOIrJuC-rEk16wbmHPB_n6DEY2AUPRoiQYTQZs=s240-p-k-rw-no" alt="Logo">
-    <a href="https://sites.google.com/view/bobsgwebsite/home">Clever | Portal</a>
-  </div>
-
-  <div class="webgl-content">
-    <div id="unityContainer">
-      <div id="gameContainer"></div>
-    </div>
-  </div>
-
-  <script>
-    // 3. START THE GAME
-    var gameInstance = UnityLoader.instantiate(
-      "gameContainer", 
-      "https://rawcdn.githack.com/Nailington/3kh0-assets/aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/baldi.json", 
-      { onProgress: UnityProgress }
-    );
-
-    // 4. THE 360-SPIN FIX (Pointer Lock)
-    document.addEventListener('mousedown', function (e) {
-      var canvas = document.querySelector('canvas');
-      if (canvas && e.target === canvas) {
-        canvas.requestPointerLock = canvas.requestPointerLock || 
-                                    canvas.mozRequestPointerLock || 
-                                    canvas.webkitRequestPointerLock;
-        canvas.requestPointerLock();
-      }
-    });
-  </script>
-
-</body>
-</html>
+/* This ensures the game content starts exactly where the bar ends */
+.webgl-content, #unity-container, #gameContainer {
+  margin-top: 0 !important;
+  border-top: none !important;
+}
