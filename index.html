@@ -1,68 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
 <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/TemplateData/style.css" />
+  
   <title>Clever | Portal</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
   <style>
-    /* 1. RESET & TOPBAR STYLES */
-    body { margin: 0; background: black; overflow: hidden; font-family: Arial, sans-serif; }
-    
+    /* 1. THE TOP BAR FIX - Forces white and removes blue tints */
     #topbar {
-      position: fixed; top: 0; left: 0; width: 100%; height: 60px;
-      background-color: #FFFFFF; color: black; display: flex;
-      align-items: center; padding: 0 15px; z-index: 10000;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 60px !important;
+      background-color: #ffffff !important; /* Pure White */
+      background: #ffffff !important;
+      color: #000000 !important;
+      display: flex !important;
+      align-items: center !important;
+      padding: 0 15px !important;
+      z-index: 999999 !important; /* Always on top */
+      font-family: Arial, sans-serif !important;
+      box-shadow: none !important;
+      border: none !important;
     }
-    #topbar img { height: 40px; margin-right: 12px; }
-    #topbar a { color: black; text-decoration: none; font-size: 20px; font-weight: 500; }
 
-    /* 2. GAME CONTAINER ADJUSTMENT */
-    .webgl-content {
-      position: absolute;
-      top: 60px; /* Pushes game below your 60px bar */
+    #topbar img {
+      height: 40px !important;
+      margin-right: 12px !important;
+      background: transparent !important;
+    }
+
+    #topbar a {
+      color: #000000 !important;
+      text-decoration: none !important;
+      font-size: 20px !important;
+      font-weight: 600 !important;
+      background: transparent !important;
+    }
+
+    /* 2. BODY & CONTAINER SETUP */
+    body, html {
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: #000000 !important; /* Pure Black for game area */
+      overflow: hidden !important;
       width: 100%;
-      height: calc(100% - 60px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      height: 100%;
     }
 
-    /* Force the Unity containers to fill the available space */
-    #unityContainer, #gameContainer {
+    .webgl-content {
+      position: absolute !important;
+      top: 60px !important; /* Starts right after the bar */
+      width: 100% !important;
+      height: calc(100% - 60px) !important;
+      background: #000000 !important;
+    }
+
+    #unityContainer, #gameContainer, canvas {
       width: 100% !important;
       height: 100% !important;
       margin: 0 !important;
+      display: block !important;
+      background: #000000 !important;
+    }
+
+    /* Hide any default loading bars that might be blue */
+    .progress, #unity-loading-bar {
+      display: none !important;
     }
   </style>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/TemplateData/style.css" />
   <script src="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/TemplateData/UnityProgress.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/Nailington/3kh0-assets@aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/baldi.js"></script>
-  
-  <script>
-    var gameInstance = UnityLoader.instantiate(
-      "gameContainer", 
-      "https://rawcdn.githack.com/Nailington/3kh0-assets/aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/baldi.json", 
-      {
-        onProgress: UnityProgress,
-        Module: {
-          onRuntimeInitialized: function () {
-            UnityProgress(gameInstance, "complete");
-          },
-        },
-      }
-    );
-
-    // 3. THE 360-SPIN FIX (Pointer Lock)
-    // Listens for a click on the game to lock the mouse cursor
-    document.addEventListener('mousedown', function (e) {
-      var canvas = document.querySelector('canvas');
-      if (canvas && e.target === canvas) {
-        canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
-        canvas.requestPointerLock();
-      }
-    });
-  </script>
 </head>
 
 <body>
@@ -77,6 +89,39 @@
       <div id="gameContainer"></div>
     </div>
   </div>
+
+  <script>
+    // 3. GAME INITIALIZATION
+    var gameInstance = UnityLoader.instantiate(
+      "gameContainer", 
+      "https://rawcdn.githack.com/Nailington/3kh0-assets/aeb371b7e88542fd5e61eeed9e967a446d84fe1b/baldis-basics/baldi.json", 
+      {
+        onProgress: UnityProgress,
+        Module: {
+          onRuntimeInitialized: function () {
+            UnityProgress(gameInstance, "complete");
+          },
+        },
+      }
+    );
+
+    // 4. THE 360-SPIN POINTER LOCK FIX
+    // Triggers when the user clicks the game for the first time
+    document.addEventListener('mousedown', function (e) {
+      var canvas = document.querySelector('canvas');
+      if (canvas && e.target === canvas) {
+        canvas.requestPointerLock = canvas.requestPointerLock || 
+                                    canvas.mozRequestPointerLock || 
+                                    canvas.webkitRequestPointerLock;
+        canvas.requestPointerLock();
+      }
+    });
+
+    // Keep the game focused
+    window.addEventListener('click', function() {
+       window.focus();
+    });
+  </script>
 
 </body>
 </html>
